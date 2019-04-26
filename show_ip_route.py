@@ -50,6 +50,7 @@ def connect_initial(device):
     output=session.expect(['(yes/no)','Password:', pexpect.TIMEOUT, pexpect.EOF])
     if output==0:
         session.sendline('yes')
+        session.expect(['Password:'])
         session.sendline(device['password'])
     if output==1:
         session.sendline(device['password'])
