@@ -1,14 +1,16 @@
 #----------README for pydoc documentation auto generating--------------
 
 """
-Python 2.7 script shows IP routing table of the Cisco network device
+Python 2.7 script shows particular subnets of the Cisco network device
 
 Hello everyone ! Thanks for your attention.
 
 This simple program has created to automate routine network checking of
-device IP routing table. The routing table is checking to find OSPF, 
-BGP, Static and connected routes. In this particular version device 
-credentials are provided by user from the keyboard input.
+device subnets and IP routing table. The routing table is checking to 
+find OSPF, BGP, Static and connected routes. Then output has been 
+processed to find specific subnets.
+In this particular version device credentials are provided by user 
+from the keyboard input.
 """
 
 #----------Libraries importing section---------------------------------
@@ -16,11 +18,9 @@ credentials are provided by user from the keyboard input.
 #Print function as python 3
 from __future__ import print_function
 #Importing pexpect for handle connections to the device, regular 
-#expressions for searching pattern, pretty print for nicely formatting
+#expressions for searching pattern, getpass for password prompt
 import pexpect
 import re
-from pprint import pprint as pp
-#Import getpass for password prompt
 from getpass import getpass
 
 #------------------------Function definition section-------------------
@@ -122,6 +122,61 @@ def connect(command,session):
         exit()
     return session
 
+def search_device_hostname(session):
+    """
+    Searching the device's hostname in running-config
+
+    Input parameters:
+        session - pexpect object contains ssh session to the device
+    Returns:
+        hostname - string contains the device's hostname
+    """
+    session=connect('show running-config | in hostname',session)
+    config=session.before.splitlines()
+    host=re.compile('^hostname +.*')
+    for line in config:
+        if host.search(line):
+            hostname=host.search(line).group(0)[9:]
+            print('Device is '+hostname)
+            break
+        else:
+            hostname='Nothing found'
+    return hostname
+
+def parsing_ip_route(show_ip_route):
+    """
+    Collection of regular expressions that processing ip routing table
+
+    Input parameters:
+        show_ip_route - dictionary of strings from show ip route output
+    Returns:
+        none
+    """
+    #Processing the routing table by regular expressions
+    routes=re.compile('^B.*|^O.*|^C +.*|^S.*')
+    search_result=list()
+
+    #Looping through the list and searching matches 
+    for line in show_ip_route:
+        if routes.search(line):
+            search_result.append(routes.search(line).group(0))
+
+    #Processing received routes with additional regular expressions 
+    loopback=re.compile('^C.* loopback0$')
+    lan=re.compile('^C.* Vlan20$')
+    voip=re.compile('^C.* Vlan21$')
+    if search_result:
+        for line in search_result:
+            if loopback.search(line):
+                print('Loopback is '+loopback.search(line).group(0)[9:23])
+            elif lan.search(line):
+                print('LAN subnet is '+lan.search(line).group(0)[9:26])
+            elif voip.search(line):
+                print('VoIP subnet is '+voip.search(line).group(0)[9:26])
+    else:
+        print('No routes found !')
+    exit()
+
 #----------Main code---------------------------------------------------
 #
 #Temporary fix for pydoc correct working
@@ -133,20 +188,12 @@ if __name__ == '__main__':
 
     #Printing output and closing the session
     show_ip_route=session.before.splitlines()
+
+    #Search for device hostname
+    hostname=search_device_hostname(session)
     session.close()
 
     #Processing the routing table by regular expressions
-    regex=re.compile('^B.*|^O.*|^C +.*|^S.*')
-    search_result=list()
+    parsing_ip_route(show_ip_route)
 
-    #Looping through the list and searching matches 
-    for line in show_ip_route:
-        if regex.search(line):
-            search_result.append(regex.search(line).group(0))
-
-    #If matches exists print nicely formatted output
-    if search_result:
-        pp(search_result)
-    else:
-        print('No routes found !')
     exit()
