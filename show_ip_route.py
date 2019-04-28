@@ -20,6 +20,8 @@ from __future__ import print_function
 import pexpect
 import re
 from pprint import pprint as pp
+#Import getpass for password prompt
+from getpass import getpass
 
 #------------------------Function definition section-------------------
 #
@@ -39,7 +41,7 @@ def keyboard_input():
                 'Enter device IP address (or Ctrl-C to exit):')
             device['username']=raw_input(
                 'Enter username (or Ctrl-C to exit):')
-            device['password']=raw_input(
+            device['password']=getpass(
                 'Enter password (or Ctrl-C to exit):')
             break
         except KeyboardInterrupt:
