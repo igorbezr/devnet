@@ -13,8 +13,6 @@ DESCRIPTION
     device subnets and IP routing table. The routing table is checking to 
     find OSPF, BGP, Static and connected routes. Then output has been 
     processed to find specific subnets.
-    In this particular version device credentials are provided by user 
-    from the keyboard input.
 
 FUNCTIONS
     connect(command, session)
@@ -49,6 +47,14 @@ FUNCTIONS
             show_ip_route - dictionary of strings from show ip route output
         Returns:
             none
+    
+    reading_ip_from_file(devices)
+        Reading IP addresses of devices from .txt file
+        
+        Input parameters:
+            devices - string, filename for a list of IP addresses
+        Returns:
+            ip - list that contains IP addresses reading from the file
     
     search_device_hostname(session)
         Searching the device's hostname in running-config

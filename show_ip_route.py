@@ -9,8 +9,6 @@ This simple program has created to automate routine network checking of
 device subnets and IP routing table. The routing table is checking to 
 find OSPF, BGP, Static and connected routes. Then output has been 
 processed to find specific subnets.
-In this particular version device credentials are provided by user 
-from the keyboard input.
 """
 
 #----------Libraries importing section---------------------------------
@@ -86,13 +84,13 @@ def connect_initial(device):
         print(
             'Connection to the device '+device['ip']+' timed out !')
         print(session.before)
-        exit()
+        return 1
     if output==3:
         print(
             'Connection to the device '+device['ip']+
             +'received unexpected output :')
         print(session.before)
-        exit()
+        return 2
 
     output=session.expect(['#',pexpect.TIMEOUT,pexpect.EOF])
     if output==0:
@@ -100,12 +98,12 @@ def connect_initial(device):
     if output==1:
         print('Connection to the device '+device['ip']+' timed out !')
         print(session.before)
-        exit()
+        return 1
     if output==2:
         print('Connection to the device'+device['ip']+
             +' received unexpected output:')
         print(session.before)
-        exit()
+        return 2
  
     session.sendline('terminal length 0')
     output=session.expect(['#',pexpect.TIMEOUT,pexpect.EOF])
@@ -113,7 +111,7 @@ def connect_initial(device):
         print('Connection to the device '+device['ip']+
             +' received unexpected output')
         print(session.before)
-        exit()
+        return 2
     return session
 
 def connect(command,session):
@@ -132,7 +130,7 @@ def connect(command,session):
         print('Connection to the device '+device['ip']+
             +' received unexpected output')
         print(session.before)
-        exit()
+        return 2
     return session
 
 def search_device_hostname(session):
@@ -202,16 +200,18 @@ if __name__ == '__main__':
     for ip in devices_ip:
         device['ip']=ip
         session=connect_initial(device)
-        session=connect('show ip route',session)
+        #If errors codes were not returned in initial connect
+        if session !=1 and session != 2:
+            session=connect('show ip route',session)
 
-        #Printing output and closing the session
-        show_ip_route=session.before.splitlines()
+            #Printing output and closing the session
+            show_ip_route=session.before.splitlines()
 
-        #Search for device hostname
-        hostname=search_device_hostname(session)
-        session.close()
+            #Search for device hostname
+            hostname=search_device_hostname(session)
+            session.close()
 
-        #Processing the routing table by regular expressions
-        parsing_ip_route(show_ip_route)
+            #Processing the routing table by regular expressions
+            parsing_ip_route(show_ip_route)
 
     exit()
