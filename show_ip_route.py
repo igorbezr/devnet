@@ -162,17 +162,19 @@ def parsing_ip_route(show_ip_route):
             search_result.append(routes.search(line).group(0))
 
     #Processing received routes with additional regular expressions 
-    loopback=re.compile('^C.* loopback0$')
+    loopback=re.compile('^C.* Loopback0$')
     lan=re.compile('^C.* Vlan20$')
     voip=re.compile('^C.* Vlan21$')
+    subnet=re.compile(
+        '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/\d{1,3}')
     if search_result:
         for line in search_result:
             if loopback.search(line):
-                print('Loopback is '+loopback.search(line).group(0)[9:23])
+                print('Loopback is '+subnet.search(line).group(0))
             elif lan.search(line):
-                print('LAN subnet is '+lan.search(line).group(0)[9:26])
+                print('LAN subnet is '+subnet.search(line).group(0))
             elif voip.search(line):
-                print('VoIP subnet is '+voip.search(line).group(0)[9:26])
+                print('VoIP subnet is '+subnet.search(line).group(0))
     else:
         print('No routes found !')
     exit()
