@@ -25,6 +25,21 @@ from getpass import getpass
 
 #------------------------Function definition section-------------------
 #
+def reading_ip_from_file(devices):
+    """
+    Reading IP addresses of devices from .txt file
+    
+    Input parameters:
+        devices - string, filename for a list of IP addresses
+    Returns:
+        ip - list that contains IP addresses reading from the file
+    """    
+    lp=list()
+    file=open(devices,'r')
+    ip=[line.strip() for line in file]
+    file.close()
+    return ip
+
 def keyboard_input():
     """ 
     The keyboard prompt for user to input device credentials
@@ -37,8 +52,6 @@ def keyboard_input():
     device=dict()
     while True:
         try:
-            device['ip']=raw_input(
-                'Enter device IP address (or Ctrl-C to exit):')
             device['username']=raw_input(
                 'Enter username (or Ctrl-C to exit):')
             device['password']=getpass(
@@ -48,7 +61,7 @@ def keyboard_input():
             print('\n')
             print('Program is terminating !')
             exit()
-    return device    
+    return device
 
 def connect_initial(device):
     """
@@ -177,25 +190,28 @@ def parsing_ip_route(show_ip_route):
                 print('VoIP subnet is '+subnet.search(line).group(0))
     else:
         print('No routes found !')
-    exit()
+    return 0
 
 #----------Main code---------------------------------------------------
 #
 #Temporary fix for pydoc correct working
 if __name__ == '__main__':
-    #Connection to the device and execution 'show ip route' command
+    #Connection to the each device and execution 'show ip route' command
+    devices_ip=reading_ip_from_file('devices.txt')
     device=keyboard_input()
-    session=connect_initial(device)
-    session=connect('show ip route',session)
+    for ip in devices_ip:
+        device['ip']=ip
+        session=connect_initial(device)
+        session=connect('show ip route',session)
 
-    #Printing output and closing the session
-    show_ip_route=session.before.splitlines()
+        #Printing output and closing the session
+        show_ip_route=session.before.splitlines()
 
-    #Search for device hostname
-    hostname=search_device_hostname(session)
-    session.close()
+        #Search for device hostname
+        hostname=search_device_hostname(session)
+        session.close()
 
-    #Processing the routing table by regular expressions
-    parsing_ip_route(show_ip_route)
+        #Processing the routing table by regular expressions
+        parsing_ip_route(show_ip_route)
 
     exit()
