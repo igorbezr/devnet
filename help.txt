@@ -10,43 +10,51 @@ DESCRIPTION
     Hello everyone ! Thanks for your attention.
     
     This simple program has created to automate routine network checking of
-    device subnets and IP routing table. The routing table is checking to 
-    find OSPF, BGP, Static and connected routes. Then output has been 
+    device subnets and IP routing table. The routing table is checking to
+    find OSPF, BGP, Static and connected routes. Then output has been
     processed to find specific subnets.
 
+CLASSES
+    GeneralNetworkDevice
+    
+    class GeneralNetworkDevice
+     |  Class for typical network device
+     |  
+     |  Attributes:
+     |  self.ip - ip address of the network device
+     |  self.username - username for device's login
+     |  self.password - password for this device
+     |  self.session - pexpect ssh session to the device
+     |  
+     |  Methods:
+     |  __init__ - initiation method
+     |  initial_connect - method that is handled initial connection
+     |  send_line - method that is used to send command to the device
+     |  search_device_hostname - Searching the device's hostname
+     |                          in running-config
+     |  parsing_ip_route - parsing the output from 'show ip route'
+     |                          to find subnets
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, ip, username, password)
+     |  
+     |  initial_connect(self)
+     |  
+     |  parsing_ip_route(self)
+     |  
+     |  search_device_hostname(self)
+     |  
+     |  send_line(self, command)
+
 FUNCTIONS
-    connect(command, session)
-        Send 'command' to the device CLI and take care of the received output
-        
-        Input parameters:
-            command - string contains correct CLI command
-            session - pexpect object contains ssh session to the device
-        Returns:
-            session - pexpect object contains ssh session to the device
-    
-    connect_initial(device)
-        Handling initial connection to the device.
-        
-        Input parameters:
-            device - dictionary contains device's credentials
-        Returns:
-            session - pexpect object contains ssh session to the device
-    
     keyboard_input()
         The keyboard prompt for user to input device credentials
         
         Input parameters:
             none
         Returns:
-            device - dictionary contains device's credentials
-    
-    parsing_ip_route(show_ip_route)
-        Collection of regular expressions that processing ip routing table
-        
-        Input parameters:
-            show_ip_route - dictionary of strings from show ip route output
-        Returns:
-            none
+            credentials - dictionary contains device's credentials
     
     reading_ip_from_file(devices)
         Reading IP addresses of devices from .txt file
@@ -55,14 +63,6 @@ FUNCTIONS
             devices - string, filename for a list of IP addresses
         Returns:
             ip - list that contains IP addresses reading from the file
-    
-    search_device_hostname(session)
-        Searching the device's hostname in running-config
-        
-        Input parameters:
-            session - pexpect object contains ssh session to the device
-        Returns:
-            hostname - string contains the device's hostname
 
 DATA
     print_function = _Feature((2, 6, 0, 'alpha', 2), (3, 0, 0, 'alpha', 0)...
