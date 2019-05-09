@@ -74,8 +74,8 @@ class GeneralNetworkDevice():
         if output == 3:
             print(
                 'Connection to the device ' +
-                + self.ip +
-                +'received unexpected output :')
+                self.ip +
+                ' received unexpected output :')
             print(self.session.before)
             self.session = 1
             return 1
@@ -93,9 +93,9 @@ class GeneralNetworkDevice():
             return 1
         if output == 2:
             print(
-                'Connection to the device' +
-                + self.ip +
-                + ' received unexpected output:')
+                'Connection to the device ' +
+                self.ip +
+                ' received unexpected output:')
             print(self.session.before)
             self.session = 1
             return 1
@@ -112,8 +112,8 @@ class GeneralNetworkDevice():
         if output != 0:
             print(
                 'Connection to the device ' +
-                + self.ip +
-                +' received unexpected output')
+                self.ip +
+                ' received unexpected output')
             print(self.session.before)
             self.session = 1
             return 1
@@ -215,7 +215,7 @@ if __name__ == '__main__':
     ip_addresses = reading_ip_from_file('devices.txt')
     credentials = keyboard_input()
     for ip in ip_addresses:
-        # Create new instance of class GeneralNetworkDevice
+        # Create new instance of the GeneralNetworkDevice class
         device = GeneralNetworkDevice(
             ip,
             credentials['username'],
