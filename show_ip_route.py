@@ -53,7 +53,7 @@ class GeneralNetworkDevice():
 
         self.session = pexpect.spawn(
             'ssh ' + self.username + '@' + self.ip,
-            timeout=10)
+            timeout=30)
         output = self.session.expect([
             '(yes/no)',
             'Password:',
@@ -61,8 +61,19 @@ class GeneralNetworkDevice():
             pexpect.EOF])
         if output == 0:
             self.session.sendline('yes')
-            self.session.expect(['Password:'])
-            self.session.sendline(self.password)
+            self.session.expect([
+                'Warning: Permanently added ' + self.ip +
+                ' (RSA) to the list of known hosts.',
+                pexpect.TIMEOUT,
+                pexpect.EOF])
+            if self.session != 0:
+                print(
+                    'Connection to the device ' +
+                    self.ip +
+                    ' received unexpected output :')
+                print(self.session.before)
+                self.session = 1
+                return 1
         if output == 1:
             self.session.sendline(self.password)
         if output == 2:
@@ -161,6 +172,7 @@ class GeneralNetworkDevice():
                     print('VoIP subnet is ' + subnet.search(line).group(0))
         else:
             print('No routes found !')
+            print('\n')
         return 0
 
 
