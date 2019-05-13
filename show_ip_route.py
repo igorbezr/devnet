@@ -211,7 +211,6 @@ if __name__ == '__main__':
             credentials['password'])
         # Trying to initially connect to the device
         device.initial_connect()
-        print('Indicator is ' + str(device.error))
         # If error code was not returned in initial connect
         if device.error is False:
             device.send_command('terminal length 0')
