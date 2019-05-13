@@ -36,7 +36,7 @@ class GeneralNetworkDevice():
     Methods:
     __init__ - initiation method
     initial_connect - method that is handled initial connection
-    send_line - method that is used to send command to the device
+    send_command - method that is used to send command to the device
     search_device_hostname - Searching the device's hostname
                             in running-config
     parsing_ip_route - parsing the output from 'show ip route'
@@ -48,9 +48,9 @@ class GeneralNetworkDevice():
         self.username = username
         self.password = password
         self.session = None
+        self.error = False
 
     def initial_connect(self):
-
         self.session = pexpect.spawn(
             'ssh ' + self.username + '@' + self.ip,
             timeout=30)
@@ -61,60 +61,38 @@ class GeneralNetworkDevice():
             pexpect.EOF])
         if output == 0:
             self.session.sendline('yes')
-            self.session.expect([
-                'Warning: Permanently added ' + self.ip +
-                ' (RSA) to the list of known hosts.',
+            output = self.session.expect_exact([
+                ')' + '?' + ' yes' +
+                '\nWarning: Permanently added \'' + self.ip +
+                '\'' + '(RSA) to the list of known hosts.' +
+                '\nPassword:',
                 pexpect.TIMEOUT,
                 pexpect.EOF])
-            if self.session != 0:
+            if output != 0:
                 print(
-                    'Connection to the device ' +
-                    self.ip +
+                    'Connection to the device ' + self.ip +
                     ' received unexpected output :')
                 print(self.session.before)
-                self.session = 1
-                return 1
+                self.error = True
+                return self.error
+            self.send_command(self.password)
         if output == 1:
-            self.session.sendline(self.password)
+            self.send_command(self.password)
         if output == 2:
             print(
                 'Connection to the device ' + self.ip + ' timed out !')
             print(self.session.before)
-            self.session = 1
-            return 1
+            self.error = True
+            return self.error
         if output == 3:
             print(
-                'Connection to the device ' +
-                self.ip +
+                'Connection to the device ' + self.ip +
                 ' received unexpected output :')
             print(self.session.before)
-            self.session = 1
-            return 1
+            self.error = True
+            return self.error
 
-        output = self.session.expect([
-            '#',
-            pexpect.TIMEOUT,
-            pexpect.EOF])
-        if output == 0:
-            print('Connection to the device ' + self.ip + ' successful !')
-        if output == 1:
-            print('Connection to the device ' + self.ip + ' timed out !')
-            print(self.session.before)
-            self.session = 1
-            return 1
-        if output == 2:
-            print(
-                'Connection to the device ' +
-                self.ip +
-                ' received unexpected output:')
-            print(self.session.before)
-            self.session = 1
-            return 1
-
-        self.send_line('terminal length 0')
-        return self.session
-
-    def send_line(self, command):
+    def send_command(self, command):
         self.session.sendline(command)
         output = self.session.expect([
             '#',
@@ -122,22 +100,22 @@ class GeneralNetworkDevice():
             pexpect.EOF])
         if output != 0:
             print(
-                'Connection to the device ' +
-                self.ip +
+                'Connection to the device ' + self.ip +
                 ' received unexpected output')
             print(self.session.before)
-            self.session = 1
-            return 1
+            self.error = True
+            return self.error
         return self.session
 
     def search_device_hostname(self):
-        self.session = self.send_line('show running-config | in hostname')
+        print('Device IP address is ' + self.ip)
+        self.session = self.send_command('show running-config | in hostname')
         config = self.session.before.splitlines()
         host = re.compile('^hostname +.*')
         for line in config:
             if host.search(line):
                 hostname = host.search(line).group(0)[9:]
-                print('Device is ' + hostname)
+                print('Device hostname is ' + hostname)
                 break
         else:
                 print('Nothing found')
@@ -145,7 +123,7 @@ class GeneralNetworkDevice():
 
     def parsing_ip_route(self):
         # Getting ip routing table from the device
-        self.session = self.send_line('show ip route')
+        self.session = self.send_command('show ip route')
         show_ip_route = self.session.before.splitlines()
         # Processing the routing table by regular expressions
         routes = re.compile('^B.*|^O.*|^C +.*|^S.*')
@@ -172,7 +150,6 @@ class GeneralNetworkDevice():
                     print('VoIP subnet is ' + subnet.search(line).group(0))
         else:
             print('No routes found !')
-            print('\n')
         return 0
 
 
@@ -232,10 +209,16 @@ if __name__ == '__main__':
             ip,
             credentials['username'],
             credentials['password'])
+        # Trying to initially connect to the device
         device.initial_connect()
+        print('Indicator is ' + str(device.error))
         # If error code was not returned in initial connect
-        if device.session != 1:
+        if device.error is False:
+            device.send_command('terminal length 0')
             device.search_device_hostname()
             device.parsing_ip_route()
             device.session.close()
+            print('\n')
+        else:
+            print('\n')
     exit()
