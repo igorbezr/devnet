@@ -25,11 +25,12 @@ CLASSES
      |  self.username - username for device's login
      |  self.password - password for this device
      |  self.session - pexpect ssh session to the device
+     |  self.error - flag, indicates that an error has occurred
      |  
      |  Methods:
      |  __init__ - initiation method
      |  initial_connect - method that is handled initial connection
-     |  send_line - method that is used to send command to the device
+     |  send_command - method that is used to send command to the device
      |  search_device_hostname - Searching the device's hostname
      |                          in running-config
      |  parsing_ip_route - parsing the output from 'show ip route'
@@ -45,7 +46,7 @@ CLASSES
      |  
      |  search_device_hostname(self)
      |  
-     |  send_line(self, command)
+     |  send_command(self, command)
 
 FUNCTIONS
     keyboard_input()

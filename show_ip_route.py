@@ -32,6 +32,7 @@ class GeneralNetworkDevice():
     self.username - username for device's login
     self.password - password for this device
     self.session - pexpect ssh session to the device
+    self.error - flag, indicates that an error has occurred
 
     Methods:
     __init__ - initiation method
