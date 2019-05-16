@@ -1,7 +1,7 @@
 Help on module check_subnets:
 
 NAME
-    check_subnets - Python 2.7 script shows particular subnets of the Cisco network device
+    check_subnets - Python 3.5 script shows particular subnets of the Cisco network device
 
 FILE
     /home/cisco/repo/check_subnets.py
@@ -64,8 +64,5 @@ FUNCTIONS
             devices - string, filename for a list of IP addresses
         Returns:
             ip - list that contains IP addresses reading from the file
-
-DATA
-    print_function = _Feature((2, 6, 0, 'alpha', 2), (3, 0, 0, 'alpha', 0)...
 
 
