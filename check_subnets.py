@@ -1,7 +1,7 @@
 # ---------README for pydoc documentation auto generating-------------
 
 """
-Python 2.7 script shows particular subnets of the Cisco network device
+Python 3.5 script shows particular subnets of the Cisco network device
 
 Hello everyone ! Thanks for your attention.
 
@@ -12,9 +12,6 @@ processed to find specific subnets.
 """
 
 # ----------Libraries importing section---------------------------------
-#
-# Print function as python 3
-from __future__ import print_function
 # Importing pexpect for handle connections to the device, regular
 # expressions for searching pattern, getpass for password prompt
 import pexpect
@@ -73,7 +70,7 @@ class GeneralNetworkDevice():
                 print(
                     'Connection to the device ' + self.ip +
                     ' received unexpected output :')
-                print(self.session.before)
+                print(self.session.before.strip())
                 self.error = True
                 return self.error
             self.send_command(self.password)
@@ -82,14 +79,14 @@ class GeneralNetworkDevice():
         if output == 2:
             print(
                 'Connection to the device ' + self.ip + ' timed out !')
-            print(self.session.before)
+            print(self.session.before.strip())
             self.error = True
             return self.error
         if output == 3:
             print(
                 'Connection to the device ' + self.ip +
                 ' received unexpected output :')
-            print(self.session.before)
+            print(self.session.before.strip())
             self.error = True
             return self.error
 
@@ -103,7 +100,7 @@ class GeneralNetworkDevice():
             print(
                 'Connection to the device ' + self.ip +
                 ' received unexpected output')
-            print(self.session.before)
+            print(self.session.before.strip())
             self.error = True
             return self.error
         return self.session
@@ -114,6 +111,7 @@ class GeneralNetworkDevice():
         config = self.session.before.splitlines()
         host = re.compile('^hostname +.*')
         for line in config:
+            line = line.strip().decode(encoding="utf-8", errors="strict")
             if host.search(line):
                 hostname = host.search(line).group(0)[9:]
                 print('Device hostname is ' + hostname)
@@ -132,6 +130,7 @@ class GeneralNetworkDevice():
 
         # Looping through the list and searching matches
         for line in show_ip_route:
+            line = line.strip().decode(encoding="utf-8", errors="strict")
             if routes.search(line):
                 search_result.append(routes.search(line).group(0))
 
@@ -185,7 +184,7 @@ def keyboard_input():
     credentials = dict()
     while True:
         try:
-            credentials['username'] = raw_input(
+            credentials['username'] = input(
                 'Enter username (or Ctrl-C to exit):')
             credentials['password'] = getpass(
                 'Enter password (or Ctrl-C to exit):')
