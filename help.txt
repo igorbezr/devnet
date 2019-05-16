@@ -1,10 +1,10 @@
-Help on module show_ip_route:
+Help on module check_subnets:
 
 NAME
-    show_ip_route - Python 2.7 script shows particular subnets of the Cisco network device
+    check_subnets - Python 2.7 script shows particular subnets of the Cisco network device
 
 FILE
-    /home/cisco/repo/show_ip_route.py
+    /home/cisco/repo/check_subnets.py
 
 DESCRIPTION
     Hello everyone ! Thanks for your attention.
