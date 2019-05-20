@@ -1,22 +1,17 @@
 # ---------README for pydoc documentation auto generating-------------
 
 """
-Python 3.5 script shows particular subnets of the Cisco network device
+This module contains network devices classes code
 
-Hello everyone ! Thanks for your attention.
-
-This simple program has created to automate routine network checking of
-device subnets and IP routing table. The routing table is checking to
-find OSPF, BGP, Static and connected routes. Then output has been
-processed to find specific subnets.
+The code has created to automate the routine network checking of
+devices hostnames, LAN and VoIP subnets
 """
 
-# ----------Libraries importing section---------------------------------
+# ----------Modules importing section---------------------------------
 # Importing pexpect for handle connections to the device, regular
-# expressions for searching pattern, getpass for password prompt
+# expressions for searching pattern
 import pexpect
 import re
-from getpass import getpass
 
 
 # ----------Classes definition section----------------------------------
@@ -151,73 +146,3 @@ class GeneralNetworkDevice():
         else:
             print('No routes found !')
         return 0
-
-
-# ----------Function definition section--------------------------------
-#
-def reading_ip_from_file(devices):
-    """
-    Reading IP addresses of devices from .txt file
-
-    Input parameters:
-        devices - string, filename for a list of IP addresses
-    Returns:
-        ip - list that contains IP addresses reading from the file
-    """
-
-    ip_addresses = list()
-    file = open(devices, 'r')
-    ip_addresses = [line.strip() for line in file]
-    file.close()
-    return ip_addresses
-
-
-def keyboard_input():
-    """
-    The keyboard prompt for user to input device credentials
-
-    Input parameters:
-        none
-    Returns:
-        credentials - dictionary contains device's credentials
-    """
-    credentials = dict()
-    while True:
-        try:
-            credentials['username'] = input(
-                'Enter username (or Ctrl-C to exit):')
-            credentials['password'] = getpass(
-                'Enter password (or Ctrl-C to exit):')
-            break
-        except KeyboardInterrupt:
-            print('\n')
-            print('Program is terminating !')
-            exit()
-    return credentials
-
-
-# ----------Main code---------------------------------------------------
-#
-# Temporary fix for pydoc correct working
-if __name__ == '__main__':
-    # Connection to the each device and execution 'show ip route' command
-    ip_addresses = reading_ip_from_file('devices.txt')
-    credentials = keyboard_input()
-    for ip in ip_addresses:
-        # Create new instance of the GeneralNetworkDevice class
-        device = GeneralNetworkDevice(
-            ip,
-            credentials['username'],
-            credentials['password'])
-        # Trying to initially connect to the device
-        device.initial_connect()
-        # If error code was not returned in initial connect
-        if device.error is False:
-            device.send_command('terminal length 0')
-            device.search_device_hostname()
-            device.parsing_ip_route()
-            device.session.close()
-            print('\n')
-        else:
-            print('\n')
-    exit()

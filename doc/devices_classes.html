@@ -1,0 +1,73 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module devices_classes</title>
+<meta charset="utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>devices_classes</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/cisco/repo/devices_classes.py">/home/cisco/repo/devices_classes.py</a></font></td></tr></table>
+    <p><tt>This&nbsp;module&nbsp;contains&nbsp;network&nbsp;devices&nbsp;classes&nbsp;code<br>
+&nbsp;<br>
+The&nbsp;code&nbsp;has&nbsp;created&nbsp;to&nbsp;automate&nbsp;the&nbsp;routine&nbsp;network&nbsp;checking&nbsp;of<br>
+devices&nbsp;hostnames,&nbsp;LAN&nbsp;and&nbsp;VoIP&nbsp;subnets</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="pexpect.html">pexpect</a><br>
+</td><td width="25%" valign=top><a href="re.html">re</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="devices_classes.html#GeneralNetworkDevice">GeneralNetworkDevice</a>
+</font></dt></dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="GeneralNetworkDevice">class <strong>GeneralNetworkDevice</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Class&nbsp;for&nbsp;typical&nbsp;network&nbsp;device<br>
+&nbsp;<br>
+Attributes:<br>
+self.<strong>ip</strong>&nbsp;-&nbsp;ip&nbsp;address&nbsp;of&nbsp;the&nbsp;network&nbsp;device<br>
+self.<strong>username</strong>&nbsp;-&nbsp;username&nbsp;for&nbsp;device's&nbsp;login<br>
+self.<strong>password</strong>&nbsp;-&nbsp;password&nbsp;for&nbsp;this&nbsp;device<br>
+self.<strong>session</strong>&nbsp;-&nbsp;pexpect&nbsp;ssh&nbsp;session&nbsp;to&nbsp;the&nbsp;device<br>
+self.<strong>error</strong>&nbsp;-&nbsp;flag,&nbsp;indicates&nbsp;that&nbsp;an&nbsp;error&nbsp;has&nbsp;occurred<br>
+&nbsp;<br>
+Methods:<br>
+__init__&nbsp;-&nbsp;initiation&nbsp;method<br>
+initial_connect&nbsp;-&nbsp;method&nbsp;that&nbsp;is&nbsp;handled&nbsp;initial&nbsp;connection<br>
+send_command&nbsp;-&nbsp;method&nbsp;that&nbsp;is&nbsp;used&nbsp;to&nbsp;send&nbsp;command&nbsp;to&nbsp;the&nbsp;device<br>
+search_device_hostname&nbsp;-&nbsp;Searching&nbsp;the&nbsp;device's&nbsp;hostname<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;in&nbsp;running-config<br>
+parsing_ip_route&nbsp;-&nbsp;parsing&nbsp;the&nbsp;output&nbsp;from&nbsp;'show&nbsp;ip&nbsp;route'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;find&nbsp;subnets<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="GeneralNetworkDevice-__init__"><strong>__init__</strong></a>(self, ip, username, password)</dt></dl>
+
+<dl><dt><a name="GeneralNetworkDevice-initial_connect"><strong>initial_connect</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="GeneralNetworkDevice-parsing_ip_route"><strong>parsing_ip_route</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="GeneralNetworkDevice-search_device_hostname"><strong>search_device_hostname</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="GeneralNetworkDevice-send_command"><strong>send_command</strong></a>(self, command)</dt></dl>
+
+</td></tr></table></td></tr></table>
+</body></html>
