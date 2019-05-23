@@ -11,9 +11,15 @@ import devices_classes as dev
 import input_output_function as func
 # Import regular expression module
 import re
+# Import os library for operation with files
+import os
 
 # ----------Main code---------------------------------------------------
 #
+# Clear existing JSON log file
+if os.path.isfile('/home/cisco/repo/code/log.json') is True:
+    os.remove('/home/cisco/repo/code/log.json')
+
 # Fix for pydoc correct working
 if __name__ == '__main__':
 
@@ -47,6 +53,7 @@ if __name__ == '__main__':
                 device.hostname)
             branch_router.parsing_ip_route()
             func.output_to_console(branch_router)
+            func.output_to_json(branch_router, 'log.json')
             branch_router.session.close()
         device.session.close()
 

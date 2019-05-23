@@ -7,6 +7,8 @@ This module contains function for I/O information to the program
 # ----------Modules importing section---------------------------------
 # Importing getpass for password prompt
 from getpass import getpass
+# Importing json for output in .json file
+import json
 
 
 # ----------Function definition section--------------------------------
@@ -61,9 +63,31 @@ def output_to_console(dev):
     Returns:
         0
     """
+    print('')
     print('Device IP address is ' + dev.ip)
     print('Device hostname is ' + dev.hostname)
     print('Loopback is ' + dev.loopback)
     print('LAN subnet is ' + dev.lan)
     print('VoIP subnet is ' + dev.voip)
+    return 0
+
+
+def output_to_json(dev, file):
+    """
+    Function for translating output to json
+
+    Input parameters:
+        dev - instance of "dev" class
+        file - string, filename for output .json file
+    Returns:
+        0
+    """
+    dict_for_json = {}
+    dict_for_json['ip'] = str(dev.ip)
+    dict_for_json['hostname'] = str(dev.hostname)
+    dict_for_json['loopback'] = str(dev.loopback)
+    dict_for_json['lan'] = str(dev.lan)
+    dict_for_json['voip'] = str(dev.voip)
+    with open(file, 'a') as json_file:
+        json_file.write(json.dumps(dict_for_json, sort_keys=True))
     return 0

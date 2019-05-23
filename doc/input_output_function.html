@@ -9,10 +9,17 @@
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>input_output_function</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/cisco/repo/input_output_function.py">/home/cisco/repo/input_output_function.py</a></font></td></tr></table>
-    <p><tt>This&nbsp;module&nbsp;contains&nbsp;function&nbsp;for&nbsp;reading&nbsp;device&nbsp;information&nbsp;from&nbsp;a&nbsp;file<br>
-and&nbsp;for&nbsp;prompting&nbsp;password&nbsp;to&nbsp;user</tt></p>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/cisco/repo/code/input_output_function.py">/home/cisco/repo/code/input_output_function.py</a></font></td></tr></table>
+    <p><tt>This&nbsp;module&nbsp;contains&nbsp;function&nbsp;for&nbsp;I/O&nbsp;information&nbsp;to&nbsp;the&nbsp;program</tt></p>
 <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="json.html">json</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#eeaa77">
 <td colspan=3 valign=bottom>&nbsp;<br>
@@ -25,6 +32,19 @@ Input&nbsp;parameters:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;none<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;credentials&nbsp;-&nbsp;dictionary&nbsp;contains&nbsp;device's&nbsp;credentials</tt></dd></dl>
+ <dl><dt><a name="-output_to_console"><strong>output_to_console</strong></a>(dev)</dt><dd><tt>Printing&nbsp;content&nbsp;of&nbsp;"dev"&nbsp;class&nbsp;instance&nbsp;attributes&nbsp;to&nbsp;the&nbsp;console<br>
+&nbsp;<br>
+Input&nbsp;parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dev&nbsp;-&nbsp;instance&nbsp;of&nbsp;"dev"&nbsp;class<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;0</tt></dd></dl>
+ <dl><dt><a name="-output_to_json"><strong>output_to_json</strong></a>(dev, file)</dt><dd><tt>Function&nbsp;for&nbsp;translating&nbsp;output&nbsp;to&nbsp;json<br>
+&nbsp;<br>
+Input&nbsp;parameters:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dev&nbsp;-&nbsp;instance&nbsp;of&nbsp;"dev"&nbsp;class<br>
+&nbsp;&nbsp;&nbsp;&nbsp;file&nbsp;-&nbsp;string,&nbsp;filename&nbsp;for&nbsp;output&nbsp;.json&nbsp;file<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;0</tt></dd></dl>
  <dl><dt><a name="-reading_ip_from_file"><strong>reading_ip_from_file</strong></a>(devices)</dt><dd><tt>Reading&nbsp;IP&nbsp;addresses&nbsp;of&nbsp;devices&nbsp;from&nbsp;.txt&nbsp;file<br>
 &nbsp;<br>
 Input&nbsp;parameters:<br>
