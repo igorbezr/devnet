@@ -1,8 +1,7 @@
 # ---------README for pydoc documentation auto generating-------------
 
 """
-This module contains function for reading device information from a file
-and for prompting password to user
+This module contains function for I/O information to the program
 """
 
 # ----------Modules importing section---------------------------------
@@ -51,3 +50,20 @@ def keyboard_input():
             print('Program is terminating !')
             exit()
     return credentials
+
+
+def output_to_console(dev):
+    """
+    Printing content of "dev" class instance attributes to the console
+
+    Input parameters:
+        dev - instance of "dev" class
+    Returns:
+        0
+    """
+    print('Device IP address is ' + dev.ip)
+    print('Device hostname is ' + dev.hostname)
+    print('Loopback is ' + dev.loopback)
+    print('LAN subnet is ' + dev.lan)
+    print('VoIP subnet is ' + dev.voip)
+    return 0

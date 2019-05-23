@@ -25,6 +25,7 @@ class GeneralNetworkDevice():
     self.password - password for this device
     self.session - pexpect ssh session to the device
     self.error - flag, indicates that an error has occurred
+    self.hostname - logical name of the network device
 
     Methods:
     __init__ - initiation method
@@ -32,8 +33,6 @@ class GeneralNetworkDevice():
     send_command - method that is used to send command to the device
     search_device_hostname - Searching the device's hostname
                             in running-config
-    parsing_ip_route - parsing the output from 'show ip route'
-                            to find subnets
     """
 
     def __init__(self, ip, username, password):
@@ -42,6 +41,7 @@ class GeneralNetworkDevice():
         self.password = password
         self.session = None
         self.error = False
+        self.hostname = None
 
     def initial_connect(self):
         self.session = pexpect.spawn(
@@ -101,19 +101,41 @@ class GeneralNetworkDevice():
         return self.session
 
     def search_device_hostname(self):
-        print('Device IP address is ' + self.ip)
         self.session = self.send_command('show running-config | in hostname')
         config = self.session.before.splitlines()
         host = re.compile('^hostname +.*')
         for line in config:
             line = line.strip().decode(encoding="utf-8", errors="strict")
             if host.search(line):
-                hostname = host.search(line).group(0)[9:]
-                print('Device hostname is ' + hostname)
+                self.hostname = host.search(line).group(0)[9:]
                 break
-        else:
-                print('Nothing found')
         return 0
+
+
+# ----------Child class for ISR 881 in regions-------------------------------
+class ISR881(GeneralNetworkDevice):
+    """
+    This class create to handle data from ISR881 in branches
+
+    Attributes:
+    self.loopback - loopback ip address of the device
+    self.lan - branch subnet for LAN devices
+    self.voip - branch subnet for VoIP phones
+
+    Methods:
+    __init__ - initiation method
+    parsing_ip_route - parsing the output from 'show ip route'
+                            to find subnets
+    """
+    def __init__(
+            self, ip, username, password,
+            session, hostname):
+        GeneralNetworkDevice.__init__(self, ip, username, password)
+        self.session = session
+        self.hostname = hostname
+        self.loopback = None
+        self.lan = None
+        self.voip = None
 
     def parsing_ip_route(self):
         # Getting ip routing table from the device
@@ -129,7 +151,7 @@ class GeneralNetworkDevice():
             if routes.search(line):
                 search_result.append(routes.search(line).group(0))
 
-        # Processing received routes with additional regular expressions
+        # Processing finding routes to see particular subnets
         loopback = re.compile('^C.* Loopback0$')
         lan = re.compile('^C.* Vlan20$')
         voip = re.compile('^C.* Vlan21$')
@@ -138,11 +160,9 @@ class GeneralNetworkDevice():
         if search_result:
             for line in search_result:
                 if loopback.search(line):
-                    print('Loopback is ' + subnet.search(line).group(0))
+                    self.loopback = subnet.search(line).group(0)
                 elif lan.search(line):
-                    print('LAN subnet is ' + subnet.search(line).group(0))
+                    self.lan = subnet.search(line).group(0)
                 elif voip.search(line):
-                    print('VoIP subnet is ' + subnet.search(line).group(0))
-        else:
-            print('No routes found !')
+                    self.voip = subnet.search(line).group(0)
         return 0
