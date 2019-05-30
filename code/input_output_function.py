@@ -89,5 +89,7 @@ def output_to_json(dev, file):
     dict_for_json['lan'] = str(dev.lan)
     dict_for_json['voip'] = str(dev.voip)
     with open(file, 'a') as json_file:
-        json_file.write(json.dumps(dict_for_json, sort_keys=True))
+        json_file.write(json.dumps(
+            dict_for_json, sort_keys=True,
+            indent=4, separators=(', ', ': ')))
     return 0
