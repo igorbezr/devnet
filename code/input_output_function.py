@@ -64,11 +64,11 @@ def output_to_console(dev):
         0
     """
     print('')
-    print('Device IP address is ' + dev.ip)
-    print('Device hostname is ' + dev.hostname)
-    print('Loopback is ' + dev.loopback)
-    print('LAN subnet is ' + dev.lan)
-    print('VoIP subnet is ' + dev.voip)
+    print('Device IP address is ' + str(dev.ip))
+    print('Device hostname is ' + str(dev.hostname))
+    print('Loopback is ' + str(dev.loopback))
+    print('LAN subnet is ' + str(dev.lan))
+    print('VoIP subnet is ' + str(dev.voip))
     return 0
 
 

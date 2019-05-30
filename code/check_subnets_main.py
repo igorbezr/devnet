@@ -42,19 +42,19 @@ if __name__ == '__main__':
             device.send_command('terminal length 0')
             device.search_device_hostname()
 
-        # Checking if this device is branch router
-        branch_hostname = re.compile('R881')
-        if branch_hostname.search(str(device.hostname)):
-            branch_router = dev.ISR881(
-                device.ip,
-                device.username,
-                device.password,
-                device.session,
-                device.hostname)
-            branch_router.parsing_ip_route()
-            func.output_to_console(branch_router)
-            func.output_to_json(branch_router, 'log.json')
-            branch_router.session.close()
-        device.session.close()
+            # Checking if this device is branch router
+            branch_hostname = re.compile('R881')
+            if branch_hostname.search(str(device.hostname)):
+                branch_router = dev.ISR881(
+                    device.ip,
+                    device.username,
+                    device.password,
+                    device.session,
+                    device.hostname)
+                branch_router.parsing_ip_route()
+                func.output_to_console(branch_router)
+                func.output_to_json(branch_router, 'log.json')
+                branch_router.session.close()
+            device.session.close()
 
     exit()
