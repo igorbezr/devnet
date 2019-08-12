@@ -1,2 +1,2 @@
 # python
-My tries to learn python for networking tasks
+My python project for networking tasks automation
