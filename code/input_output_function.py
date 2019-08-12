@@ -8,7 +8,7 @@ This module contains function for I/O information to the program
 # Importing getpass for password prompt
 from getpass import getpass
 # Importing json for output in .json file
-import json
+from json import dumps
 
 
 # ----------Function definition section--------------------------------
@@ -24,10 +24,10 @@ def reading_ip_from_file(devices):
     """
 
     ip_addresses = list()
-    file = open(devices, 'r')
-    ip_addresses = [line.strip() for line in file]
-    file.close()
+    with open(devices, 'r') as file:
+        ip_addresses = [line.strip() for line in file]
     return ip_addresses
+    return None
 
 
 def keyboard_input():
@@ -46,12 +46,11 @@ def keyboard_input():
                 'Enter username (or Ctrl-C to exit):')
             credentials['password'] = getpass(
                 'Enter password (or Ctrl-C to exit):')
-            break
+            return credentials
         except KeyboardInterrupt:
             print('\n')
             print('Program is terminating !')
             exit()
-    return credentials
 
 
 def output_to_console(dev):
@@ -61,7 +60,7 @@ def output_to_console(dev):
     Input parameters:
         dev - instance of "dev" class
     Returns:
-        0
+        None
     """
     print('')
     print('Device IP address is ' + str(dev.ip))
@@ -69,7 +68,7 @@ def output_to_console(dev):
     print('Loopback is ' + str(dev.loopback))
     print('LAN subnet is ' + str(dev.lan))
     print('VoIP subnet is ' + str(dev.voip))
-    return 0
+    return None
 
 
 def output_to_json(dev, file):
@@ -80,7 +79,7 @@ def output_to_json(dev, file):
         dev - instance of "dev" class
         file - string, filename for output .json file
     Returns:
-        0
+        None
     """
     dict_for_json = {}
     dict_for_json['ip'] = str(dev.ip)
@@ -88,8 +87,8 @@ def output_to_json(dev, file):
     dict_for_json['loopback'] = str(dev.loopback)
     dict_for_json['lan'] = str(dev.lan)
     dict_for_json['voip'] = str(dev.voip)
-    with open(file, 'a') as json_file:
-        json_file.write(json.dumps(
+    with open(file, 'a') as json_log:
+        json_log.write(dumps(
             dict_for_json, sort_keys=True,
             indent=4, separators=(', ', ': ')))
-    return 0
+    return None

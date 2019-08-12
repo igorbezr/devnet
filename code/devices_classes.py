@@ -2,15 +2,13 @@
 
 """
 This module contains network devices classes code
-
-The code has created to automate the routine network checking of
-devices hostnames, LAN and VoIP subnets
 """
 
 # ----------Modules importing section---------------------------------
 # Importing pexpect for handle connections to the device, regular
-# expressions for searching pattern
-import pexpect
+# expressions for searching patterns in the CLI output
+import pexpect as ssh
+from pexpect import TIMEOUT, EOF
 import re
 
 
@@ -19,13 +17,19 @@ class GeneralNetworkDevice():
     """
     Class for typical network device
 
-    Attributes:
+    Main attributes:
     self.ip - ip address of the network device
     self.username - username for device's login
     self.password - password for this device
     self.session - pexpect ssh session to the device
-    self.error - flag, indicates that an error has occurred
     self.hostname - logical name of the network device
+
+    Strings attributes:
+    self.credentials - pexpect ssh credentials
+    self.rsa_question - for handling 'Add new host' question
+    self.timeout_message - for situation when the TIMEOUT exception raises
+    self.unexpected_message - for situation when the device produces
+                                unexpected output
 
     Methods:
     __init__ - initiation method
@@ -40,68 +44,50 @@ class GeneralNetworkDevice():
         self.username = username
         self.password = password
         self.session = None
-        self.error = False
         self.hostname = None
+        # String for credentials and user alerting
+        self.credentials = 'ssh ' + self.username + '@' + self.ip
+        self.rsa_question = (
+            ')' + '?' + ' yes' +
+            '\nWarning: Permanently added \'' + self.ip +
+            '\'' + '(RSA) to the list of known hosts.' +
+            '\nPassword:')
+        self.timeout_message = (
+            'Connection to the device ' + self.ip + ' timed out !')
+        self.unexpected_message = (
+            'Connection to the device ' + self.ip +
+            ' received unexpected output :')
 
     def initial_connect(self):
-        self.session = pexpect.spawn(
-            'ssh ' + self.username + '@' + self.ip,
-            timeout=30)
-        output = self.session.expect([
-            '(yes/no)',
-            'Password:',
-            pexpect.TIMEOUT,
-            pexpect.EOF])
-        if output == 0:
-            self.session.sendline('yes')
-            output = self.session.expect_exact([
-                ')' + '?' + ' yes' +
-                '\nWarning: Permanently added \'' + self.ip +
-                '\'' + '(RSA) to the list of known hosts.' +
-                '\nPassword:',
-                pexpect.TIMEOUT,
-                pexpect.EOF])
-            if output != 0:
-                print(
-                    'Connection to the device ' + self.ip +
-                    ' received unexpected output :')
-                print(self.session.before.strip())
-                self.error = True
-                return self.error
-            self.send_command(self.password)
-        if output == 1:
-            self.send_command(self.password)
-        if output == 2:
-            print(
-                'Connection to the device ' + self.ip + ' timed out !')
+        try:
+            self.session = ssh.spawn(self.credentials, timeout=30)
+            self.session.expect(['rd:'])
+            self.session.sendline(self.password)
+            self.session.expect('#')
+            return True
+        except TIMEOUT:
+            print(self.timeout_message)
+            return False
+        except EOF:
+            print(self.unexpected_message)
             print(self.session.before.strip())
-            self.error = True
-            return self.error
-        if output == 3:
-            print(
-                'Connection to the device ' + self.ip +
-                ' received unexpected output :')
-            print(self.session.before.strip())
-            self.error = True
-            return self.error
+            return False
 
     def send_command(self, command):
-        self.session.sendline(command)
-        output = self.session.expect([
-            '#',
-            pexpect.TIMEOUT,
-            pexpect.EOF])
-        if output != 0:
-            print(
-                'Connection to the device ' + self.ip +
-                ' received unexpected output')
+        try:
+            self.session.sendline(command)
+            self.session.expect('#')
+            return True
+        except TIMEOUT:
+            print(self.timeout_message)
+            return False
+        except EOF:
+            print(self.unexpected_message)
             print(self.session.before.strip())
-            self.error = True
-            return self.error
-        return self.session
+            return False
 
     def search_device_hostname(self):
-        self.session = self.send_command('show running-config | in hostname')
+        self.send_command('show running-config | in hostname')
         config = self.session.before.splitlines()
         host = re.compile('^hostname +.*')
         for line in config:
@@ -109,13 +95,13 @@ class GeneralNetworkDevice():
             if host.search(line):
                 self.hostname = host.search(line).group(0)[9:]
                 break
-        return 0
+        return None
 
 
 # ----------Child class for ISR 881 in regions-------------------------------
 class ISR881(GeneralNetworkDevice):
     """
-    This class create to handle data from ISR881 in branches
+    Purpose of this class is handling data from ISR 881 in branches
 
     Attributes:
     self.loopback - loopback ip address of the device
@@ -139,7 +125,7 @@ class ISR881(GeneralNetworkDevice):
 
     def parsing_ip_route(self):
         # Getting ip routing table from the device
-        self.session = self.send_command('show ip route')
+        self.send_command('show ip route')
         show_ip_route = self.session.before.splitlines()
         # Processing the routing table by regular expressions
         routes = re.compile('^B.*|^O.*|^C +.*|^S.*')
@@ -151,7 +137,7 @@ class ISR881(GeneralNetworkDevice):
             if routes.search(line):
                 search_result.append(routes.search(line).group(0))
 
-        # Processing finding routes to see particular subnets
+        # Processing founded routes to watch particular subnets
         loopback = re.compile('^C.* Loopback0$')
         lan = re.compile('^C.* Vlan20$')
         voip = re.compile('^C.* Vlan21$')
@@ -165,4 +151,4 @@ class ISR881(GeneralNetworkDevice):
                     self.lan = subnet.search(line).group(0)
                 elif voip.search(line):
                     self.voip = subnet.search(line).group(0)
-        return 0
+        return None

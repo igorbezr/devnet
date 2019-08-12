@@ -10,10 +10,7 @@
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>devices_classes</strong></big></big></font></td
 ><td align=right valign=bottom
 ><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/cisco/repo/code/devices_classes.py">/home/cisco/repo/code/devices_classes.py</a></font></td></tr></table>
-    <p><tt>This&nbsp;module&nbsp;contains&nbsp;network&nbsp;devices&nbsp;classes&nbsp;code<br>
-&nbsp;<br>
-The&nbsp;code&nbsp;has&nbsp;created&nbsp;to&nbsp;automate&nbsp;the&nbsp;routine&nbsp;network&nbsp;checking&nbsp;of<br>
-devices&nbsp;hostnames,&nbsp;LAN&nbsp;and&nbsp;VoIP&nbsp;subnets</tt></p>
+    <p><tt>This&nbsp;module&nbsp;contains&nbsp;network&nbsp;devices&nbsp;classes&nbsp;code</tt></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
@@ -21,8 +18,8 @@ devices&nbsp;hostnames,&nbsp;LAN&nbsp;and&nbsp;VoIP&nbsp;subnets</tt></p>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
     
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="pexpect.html">pexpect</a><br>
-</td><td width="25%" valign=top><a href="re.html">re</a><br>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="re.html">re</a><br>
+</td><td width="25%" valign=top><a href="pexpect.html">pexpect</a><br>
 </td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
@@ -47,13 +44,19 @@ devices&nbsp;hostnames,&nbsp;LAN&nbsp;and&nbsp;VoIP&nbsp;subnets</tt></p>
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>Class&nbsp;for&nbsp;typical&nbsp;network&nbsp;device<br>
 &nbsp;<br>
-Attributes:<br>
+Main&nbsp;attributes:<br>
 self.<strong>ip</strong>&nbsp;-&nbsp;ip&nbsp;address&nbsp;of&nbsp;the&nbsp;network&nbsp;device<br>
 self.<strong>username</strong>&nbsp;-&nbsp;username&nbsp;for&nbsp;device's&nbsp;login<br>
 self.<strong>password</strong>&nbsp;-&nbsp;password&nbsp;for&nbsp;this&nbsp;device<br>
 self.<strong>session</strong>&nbsp;-&nbsp;pexpect&nbsp;ssh&nbsp;session&nbsp;to&nbsp;the&nbsp;device<br>
-self.<strong>error</strong>&nbsp;-&nbsp;flag,&nbsp;indicates&nbsp;that&nbsp;an&nbsp;error&nbsp;has&nbsp;occurred<br>
 self.<strong>hostname</strong>&nbsp;-&nbsp;logical&nbsp;name&nbsp;of&nbsp;the&nbsp;network&nbsp;device<br>
+&nbsp;<br>
+Strings&nbsp;attributes:<br>
+self.<strong>credentials</strong>&nbsp;-&nbsp;pexpect&nbsp;ssh&nbsp;credentials<br>
+self.<strong>rsa_question</strong>&nbsp;-&nbsp;for&nbsp;handling&nbsp;'Add&nbsp;new&nbsp;host'&nbsp;question<br>
+self.<strong>timeout_message</strong>&nbsp;-&nbsp;for&nbsp;situation&nbsp;when&nbsp;the&nbsp;TIMEOUT&nbsp;exception&nbsp;raises<br>
+self.<strong>unexpected_message</strong>&nbsp;-&nbsp;for&nbsp;situation&nbsp;when&nbsp;the&nbsp;device&nbsp;produces<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unexpected&nbsp;output<br>
 &nbsp;<br>
 Methods:<br>
 __init__&nbsp;-&nbsp;initiation&nbsp;method<br>
@@ -78,7 +81,7 @@ search_device_hostname&nbsp;-&nbsp;Searching&nbsp;the&nbsp;device's&nbsp;hostnam
 <font color="#000000" face="helvetica, arial"><a name="ISR881">class <strong>ISR881</strong></a>(<a href="devices_classes.html#GeneralNetworkDevice">GeneralNetworkDevice</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>This&nbsp;class&nbsp;create&nbsp;to&nbsp;handle&nbsp;data&nbsp;from&nbsp;<a href="#ISR881">ISR881</a>&nbsp;in&nbsp;branches<br>
+<td colspan=2><tt>Purpose&nbsp;of&nbsp;this&nbsp;class&nbsp;is&nbsp;handling&nbsp;data&nbsp;from&nbsp;ISR&nbsp;881&nbsp;in&nbsp;branches<br>
 &nbsp;<br>
 Attributes:<br>
 self.<strong>loopback</strong>&nbsp;-&nbsp;loopback&nbsp;ip&nbsp;address&nbsp;of&nbsp;the&nbsp;device<br>
