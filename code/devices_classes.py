@@ -26,7 +26,6 @@ class GeneralNetworkDevice():
 
     Strings attributes:
     self.credentials - pexpect ssh credentials
-    self.rsa_question - for handling 'Add new host' question
     self.timeout_message - for situation when the TIMEOUT exception raises
     self.unexpected_message - for situation when the device produces
                                 unexpected output
@@ -46,31 +45,32 @@ class GeneralNetworkDevice():
         self.session = None
         self.hostname = None
         # String for credentials and user alerting
-        self.credentials = 'ssh ' + self.username + '@' + self.ip
-        self.rsa_question = (
-            ')' + '?' + ' yes' +
-            '\nWarning: Permanently added \'' + self.ip +
-            '\'' + '(RSA) to the list of known hosts.' +
-            '\nPassword:')
-        self.timeout_message = (
-            'Connection to the device ' + self.ip + ' timed out !')
-        self.unexpected_message = (
-            'Connection to the device ' + self.ip +
-            ' received unexpected output :')
+        self.credentials = (
+            'ssh ' + self.username + '@' + self.ip)
+        self.timeout_message = ' '.join([
+            'Connection to the device', self.ip, 'timed out:'])
+        self.unexpected_message = ' '.join([
+            'Connection to the device', self.ip,
+            'received unexpected output :'])
 
     def initial_connect(self):
         try:
             self.session = ssh.spawn(self.credentials, timeout=30)
-            self.session.expect(['rd:'])
+            # Only new host needs to be put in known_host
+            new_host = bool(self.session.expect(['rd:', 'no']))
+            if new_host is True:
+                self.session.sendline('yes')
+                self.session.expect('rd:')
             self.session.sendline(self.password)
             self.session.expect('#')
             return True
         except TIMEOUT:
             print(self.timeout_message)
+            print(self.session.before.decode('utf-8').strip())
             return False
         except EOF:
             print(self.unexpected_message)
-            print(self.session.before.strip())
+            print(self.session.before.decode('utf-8').strip())
             return False
 
     def send_command(self, command):
@@ -88,10 +88,10 @@ class GeneralNetworkDevice():
 
     def search_device_hostname(self):
         self.send_command('show running-config | in hostname')
-        config = self.session.before.splitlines()
+        config = self.session.before.decode('utf-8').splitlines()
         host = re.compile('^hostname +.*')
         for line in config:
-            line = line.strip().decode(encoding="utf-8", errors="strict")
+            line = line.strip()
             if host.search(line):
                 self.hostname = host.search(line).group(0)[9:]
                 break
@@ -126,17 +126,15 @@ class ISR881(GeneralNetworkDevice):
     def parsing_ip_route(self):
         # Getting ip routing table from the device
         self.send_command('show ip route')
-        show_ip_route = self.session.before.splitlines()
+        show_ip_route = self.session.before.decode('utf-8').splitlines()
         # Processing the routing table by regular expressions
         routes = re.compile('^B.*|^O.*|^C +.*|^S.*')
         search_result = list()
-
         # Looping through the list and searching matches
         for line in show_ip_route:
-            line = line.strip().decode(encoding="utf-8", errors="strict")
+            line = line.strip()
             if routes.search(line):
                 search_result.append(routes.search(line).group(0))
-
         # Processing founded routes to watch particular subnets
         loopback = re.compile('^C.* Loopback0$')
         lan = re.compile('^C.* Vlan20$')

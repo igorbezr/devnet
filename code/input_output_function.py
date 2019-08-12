@@ -39,17 +39,17 @@ def keyboard_input():
     Returns:
         credentials - dictionary contains device's credentials
     """
+    print('Good day to you !' + '\n' + 'Welcome to checking subnets script !')
     credentials = dict()
     while True:
         try:
             credentials['username'] = input(
-                'Enter username (or Ctrl-C to exit):')
+                'Enter username (or Ctrl-C to exit) > ')
             credentials['password'] = getpass(
-                'Enter password (or Ctrl-C to exit):')
+                'Enter password (or Ctrl-C to exit) > ')
             return credentials
         except KeyboardInterrupt:
-            print('\n')
-            print('Program is terminating !')
+            print('\n', 'Program is terminated due to user request !')
             exit()
 
 
