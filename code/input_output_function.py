@@ -20,14 +20,18 @@ def reading_ip_from_file(devices):
     Input parameters:
         devices - string, filename for a list of IP addresses
     Returns:
-        ip - list that contains IP addresses reading from the file
+        ip_addresess - list that contains IP addresses reading from the file
     """
-
-    ip_addresses = list()
-    with open(devices, 'r') as file:
-        ip_addresses = [line.strip() for line in file]
+    # First we will checking if addresses in list is unique
+    uniq = set()
+    with open(devices, 'r+') as devices_list:
+        non_uniq_ip = devices_list.read().splitlines()
+        for address in non_uniq_ip:
+            if address not in uniq:
+                uniq.add(address)
+        ip_addresses = list(uniq)
+        ip_addresses.sort()
     return ip_addresses
-    return None
 
 
 def keyboard_input():

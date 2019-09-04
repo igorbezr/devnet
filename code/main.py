@@ -58,7 +58,7 @@ if __name__ == '__main__':
                     branch_router.session.close()
                 else:
                     print(is_not_a_branch_message)
-                device.session.close()
+            device.session.close()
     except KeyboardInterrupt:
         print('\n', 'Program is terminated due to user request !')
     exit()
