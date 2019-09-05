@@ -31,11 +31,45 @@
 <dt><font face="helvetica, arial"><a href="devices_classes.html#GeneralNetworkDevice">GeneralNetworkDevice</a>
 </font></dt><dd>
 <dl>
-<dt><font face="helvetica, arial"><a href="devices_classes.html#ISR881">ISR881</a>
+<dt><font face="helvetica, arial"><a href="devices_classes.html#BRANCH_ISR">BRANCH_ISR</a>
 </font></dt></dl>
 </dd>
 </dl>
  <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="BRANCH_ISR">class <strong>BRANCH_ISR</strong></a>(<a href="devices_classes.html#GeneralNetworkDevice">GeneralNetworkDevice</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Purpose&nbsp;of&nbsp;this&nbsp;class&nbsp;is&nbsp;handling&nbsp;data&nbsp;from&nbsp;ISR&nbsp;in&nbsp;branches<br>
+&nbsp;<br>
+Attributes:<br>
+self.<strong>loopback</strong>&nbsp;-&nbsp;loopback&nbsp;ip&nbsp;address&nbsp;of&nbsp;the&nbsp;device<br>
+self.<strong>lan</strong>&nbsp;-&nbsp;branch&nbsp;subnet&nbsp;for&nbsp;LAN&nbsp;devices<br>
+self.<strong>voip</strong>&nbsp;-&nbsp;branch&nbsp;subnet&nbsp;for&nbsp;VoIP&nbsp;phones<br>
+&nbsp;<br>
+Methods:<br>
+__init__&nbsp;-&nbsp;initiation&nbsp;method<br>
+parsing_ip_route&nbsp;-&nbsp;parsing&nbsp;the&nbsp;output&nbsp;from&nbsp;'show&nbsp;ip&nbsp;route'<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;find&nbsp;subnets<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="BRANCH_ISR-__init__"><strong>__init__</strong></a>(self, ip, username, password, session, hostname, part_number)</dt></dl>
+
+<dl><dt><a name="BRANCH_ISR-parsing_ip_route"><strong>parsing_ip_route</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="devices_classes.html#GeneralNetworkDevice">GeneralNetworkDevice</a>:<br>
+<dl><dt><a name="BRANCH_ISR-initial_connect"><strong>initial_connect</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BRANCH_ISR-search_device_hostname"><strong>search_device_hostname</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BRANCH_ISR-search_device_part_number"><strong>search_device_part_number</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BRANCH_ISR-send_command"><strong>send_command</strong></a>(self, command)</dt></dl>
+
+</td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
@@ -71,39 +105,9 @@ search_device_hostname&nbsp;-&nbsp;Searching&nbsp;the&nbsp;device's&nbsp;hostnam
 
 <dl><dt><a name="GeneralNetworkDevice-search_device_hostname"><strong>search_device_hostname</strong></a>(self)</dt></dl>
 
+<dl><dt><a name="GeneralNetworkDevice-search_device_part_number"><strong>search_device_part_number</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="GeneralNetworkDevice-send_command"><strong>send_command</strong></a>(self, command)</dt></dl>
-
-</td></tr></table> <p>
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#ffc8d8">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="ISR881">class <strong>ISR881</strong></a>(<a href="devices_classes.html#GeneralNetworkDevice">GeneralNetworkDevice</a>)</font></td></tr>
-    
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>Purpose&nbsp;of&nbsp;this&nbsp;class&nbsp;is&nbsp;handling&nbsp;data&nbsp;from&nbsp;ISR&nbsp;881&nbsp;in&nbsp;branches<br>
-&nbsp;<br>
-Attributes:<br>
-self.<strong>loopback</strong>&nbsp;-&nbsp;loopback&nbsp;ip&nbsp;address&nbsp;of&nbsp;the&nbsp;device<br>
-self.<strong>lan</strong>&nbsp;-&nbsp;branch&nbsp;subnet&nbsp;for&nbsp;LAN&nbsp;devices<br>
-self.<strong>voip</strong>&nbsp;-&nbsp;branch&nbsp;subnet&nbsp;for&nbsp;VoIP&nbsp;phones<br>
-&nbsp;<br>
-Methods:<br>
-__init__&nbsp;-&nbsp;initiation&nbsp;method<br>
-parsing_ip_route&nbsp;-&nbsp;parsing&nbsp;the&nbsp;output&nbsp;from&nbsp;'show&nbsp;ip&nbsp;route'<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;find&nbsp;subnets<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;</td>
-<td width="100%">Methods defined here:<br>
-<dl><dt><a name="ISR881-__init__"><strong>__init__</strong></a>(self, ip, username, password, session, hostname)</dt></dl>
-
-<dl><dt><a name="ISR881-parsing_ip_route"><strong>parsing_ip_route</strong></a>(self)</dt></dl>
-
-<hr>
-Methods inherited from <a href="devices_classes.html#GeneralNetworkDevice">GeneralNetworkDevice</a>:<br>
-<dl><dt><a name="ISR881-initial_connect"><strong>initial_connect</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="ISR881-search_device_hostname"><strong>search_device_hostname</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="ISR881-send_command"><strong>send_command</strong></a>(self, command)</dt></dl>
 
 </td></tr></table></td></tr></table>
 </body></html>
