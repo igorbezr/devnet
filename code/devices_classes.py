@@ -44,6 +44,7 @@ class GeneralNetworkDevice():
         self.password = password
         self.session = None
         self.hostname = None
+        self.part_number = None
         # String for credentials and user alerting
         self.credentials = (
             'ssh ' + self.username + '@' + self.ip)
@@ -97,11 +98,21 @@ class GeneralNetworkDevice():
                 break
         return None
 
+    def search_device_part_number(self):
+        template = re.compile('C+[A-Z]{0,4}?[0-9]{3,4}')
+        self.send_command('show inventory | in PID')
+        show_inventory = self.session.before.decode('utf-8').splitlines()
+        for record in show_inventory:
+            if template.search(record) is not None:
+                self.part_number = template.search(record).group(0)
+                break
+        return None
 
-# ----------Child class for ISR 881 in regions-------------------------------
-class ISR881(GeneralNetworkDevice):
+
+# ----------Child class for ISR in regions-------------------------------
+class BRANCH_ISR(GeneralNetworkDevice):
     """
-    Purpose of this class is handling data from ISR 881 in branches
+    Purpose of this class is handling data from ISR in branches
 
     Attributes:
     self.loopback - loopback ip address of the device
@@ -115,10 +126,11 @@ class ISR881(GeneralNetworkDevice):
     """
     def __init__(
             self, ip, username, password,
-            session, hostname):
+            session, hostname, part_number):
         GeneralNetworkDevice.__init__(self, ip, username, password)
         self.session = session
         self.hostname = hostname
+        self.part_number = part_number
         self.loopback = None
         self.lan = None
         self.voip = None

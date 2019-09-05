@@ -11,16 +11,10 @@ import devices_classes as dev
 from input_output_function import (
     reading_ip_from_file, keyboard_input,
     output_to_console, output_to_json)
-# Import regular expression module
-import re
-# Import os library for operation with files
-import os
+# Importing json for output in .json file
+from json import dumps
 
 # ----------Main code---------------------------------------------------
-#
-# Clear existing JSON log file
-if os.path.isfile('/home/cisco/repo/code/log.json') is True:
-    os.remove('/home/cisco/repo/code/log.json')
 
 # Fix for pydoc correct working
 if __name__ == '__main__':
@@ -28,6 +22,8 @@ if __name__ == '__main__':
         # Read device ip addresses from the file and get password prompting
         ip_addresses = reading_ip_from_file('devices.txt')
         credentials = keyboard_input()
+        # New log file for JSON
+        json_log = open('log.json', 'w')
         # Connection to the each device and execution 'show ip route' command
         for ip in ip_addresses:
             # Create new instance of the GeneralNetworkDevice class
@@ -44,21 +40,30 @@ if __name__ == '__main__':
                     device.hostname, 'with address',
                     device.ip, 'is not a branch router !'])
                 # Checking if this device is branch router
-                branch_hostname = re.compile('R881')
-                if branch_hostname.search(str(device.hostname)):
-                    branch_router = dev.ISR881(
+                device.search_device_part_number()
+                branch_routers = set([
+                    'C881', 'CISCO881', 'C2911', 'CISCO2911'])
+                if device.part_number in branch_routers:
+                    branch_router = dev.BRANCH_ISR(
                         device.ip,
                         device.username,
                         device.password,
                         device.session,
-                        device.hostname)
+                        device.hostname,
+                        device.part_number)
+                    # Getting information about subnets
                     branch_router.parsing_ip_route()
+                    # Printing output to the console
                     output_to_console(branch_router)
-                    output_to_json(branch_router, 'log.json')
+                    # Writing output to the JSON log
+                    json_log.write(dumps(
+                        output_to_json(branch_router), sort_keys=True,
+                        indent=4, separators=(', ', ': ')))
                     branch_router.session.close()
                 else:
                     print(is_not_a_branch_message)
             device.session.close()
+        json_log.close()
     except KeyboardInterrupt:
         print('\n', 'Program is terminated due to user request !')
     exit()

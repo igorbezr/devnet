@@ -7,8 +7,6 @@ This module contains function for I/O information to the program
 # ----------Modules importing section---------------------------------
 # Importing getpass for password prompt
 from getpass import getpass
-# Importing json for output in .json file
-from json import dumps
 
 
 # ----------Function definition section--------------------------------
@@ -67,32 +65,29 @@ def output_to_console(dev):
         None
     """
     print('')
-    print('Device IP address is ' + str(dev.ip))
-    print('Device hostname is ' + str(dev.hostname))
-    print('Loopback is ' + str(dev.loopback))
-    print('LAN subnet is ' + str(dev.lan))
-    print('VoIP subnet is ' + str(dev.voip))
+    print('Device IP address is', str(dev.ip))
+    print('Device hostname is', str(dev.hostname))
+    print('Device part number is', str(dev.part_number))
+    print('Loopback is', str(dev.loopback))
+    print('LAN subnet is', str(dev.lan))
+    print('VoIP subnet is', str(dev.voip))
     return None
 
 
-def output_to_json(dev, file):
+def output_to_json(dev):
     """
     Function for translating output to json
 
     Input parameters:
         dev - instance of "dev" class
-        file - string, filename for output .json file
     Returns:
-        None
+        dict_for_json - dictionary for printing
     """
     dict_for_json = {}
     dict_for_json['ip'] = str(dev.ip)
     dict_for_json['hostname'] = str(dev.hostname)
+    dict_for_json['part_number'] = str(dev.part_number)
     dict_for_json['loopback'] = str(dev.loopback)
     dict_for_json['lan'] = str(dev.lan)
     dict_for_json['voip'] = str(dev.voip)
-    with open(file, 'a') as json_log:
-        json_log.write(dumps(
-            dict_for_json, sort_keys=True,
-            indent=4, separators=(', ', ': ')))
-    return None
+    return dict_for_json
